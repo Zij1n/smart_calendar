@@ -159,12 +159,21 @@ YOU MUST BE AWARE OF THE CURRENT TIME!!!! you should only schduel event that hap
 
         # Generate unique filename
         filename = f"{uuid.uuid4()}.ics"
-        # Save to the 'public' directory for Vercel static serving
-        filepath = os.path.join("public", filename)
 
-        # Create public directory if it doesn't exist
-        if not os.path.exists("public"):
-            os.makedirs("public")
+        # Define path to the project's root public directory
+        # __file__ is calendar-app-backend/main.py
+        # os.path.dirname(__file__) is calendar-app-backend
+        # os.path.join(os.path.dirname(__file__), "..") is the project root
+        project_root_public_dir = os.path.join(
+            os.path.dirname(__file__), "..", "public"
+        )
+
+        # Save to the root 'public' directory for Vercel static serving
+        filepath = os.path.join(project_root_public_dir, filename)
+
+        # Create root public directory if it doesn't exist
+        if not os.path.exists(project_root_public_dir):
+            os.makedirs(project_root_public_dir)
 
         # Save to the public file directory
         with open(filepath, "wb") as f:
@@ -177,8 +186,8 @@ YOU MUST BE AWARE OF THE CURRENT TIME!!!! you should only schduel event that hap
             # Use HTTPS for production
             file_url = f"https://{base_url}/{filename}"
         else:
-            # Fallback for local development (if needed)
-            file_url = f"http://127.0.0.1:8000/public/{filename}"
+            # Fallback for local development (if needed) - assumes local server serves from root public
+            file_url = f"http://127.0.0.1:8000/{filename}"  # If served from root public
 
         return JSONResponse(content={"ics_url": file_url})
 
