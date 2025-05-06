@@ -5,7 +5,7 @@ import os
 import uuid
 import re  # Import the re module
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response  # Import Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -100,12 +100,12 @@ You are acting as a **flexible daily planner** for someone with an **irregular s
 
 ### Example Written Output:
 \`\`\`
-08:00 PM – 09:00 PM: Research  
-09:00 PM – 09:15 PM: Short Break  
-09:15 PM – 02:15 AM: Watch recording  
-02:15 AM – 02:30 AM: Short Break  
-02:30 AM – 04:30 AM: Leisure or unwind  
-Suggested bedtime: 12:00 PM  
+08:00 PM – 09:00 PM: Research
+09:00 PM – 09:15 PM: Short Break
+09:15 PM – 02:15 AM: Watch recording
+02:15 AM – 02:30 AM: Short Break
+02:30 AM – 04:30 AM: Leisure or unwind
+Suggested bedtime: 12:00 PM
 \`\`\`
 
 ---
@@ -129,8 +129,8 @@ END:VCALENDAR
 
 ---
 
-User Input: "{user_input.user_input}"  
-Current Time: "{current_time}"  
+User Input: "{user_input.user_input}"
+Current Time: "{current_time}"
 Time Zone: "{time_zone}"
 YOU MUST BE AWARE OF THE CURRENT TIME!!!! you should only schduel event that happens after the current time
 """
@@ -180,16 +180,35 @@ YOU MUST BE AWARE OF THE CURRENT TIME!!!! you should only schduel event that hap
         # The frontend will need to be updated to fetch the file differently.
         # For now, we'll return a placeholder or an indication of success.
 
-        # Returning a success message for now, as the file is saved in /tmp
-        # The frontend will need a new endpoint to retrieve this file.
-        return JSONResponse(
-            content={
-                "message": "iCalendar file generated and saved temporarily.",
-                "filename": filename,
-            }
-        )
+        # Construct the URL for the new endpoint to serve the file
+        base_url = os.getenv("VERCEL_URL")
+        if base_url:
+            # Use HTTPS for production
+            file_url = f"https://{base_url}/ics/{filename}"
+        else:
+            # Fallback for local development
+            file_url = f"http://127.0.0.1:8000/ics/{filename}"
+
+        return JSONResponse(content={"ics_url": file_url})
 
     except Exception as e:
         # Log the actual error for debugging
         print(f"Error in create_calendar_event: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# This is the new endpoint definition for serving the iCalendar file
+@app.get("/ics/{filename}")
+async def get_ics_file(filename: str):
+    """
+    Serves the iCalendar file from the temporary directory.
+    """
+    filepath = os.path.join("/tmp", filename)
+
+    if not os.path.exists(filepath):
+        raise HTTPException(status_code=404, detail="File not found")
+
+    with open(filepath, "rb") as f:
+        content = f.read()
+
+    return Response(content=content, media_type="text/calendar")

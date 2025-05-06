@@ -33,7 +33,7 @@ export default function App() {
         user_input: userInput,
         time_zone: userTimeZone, // Include the time zone
       });
-
+      console.log(backendResponse);
       if (backendResponse.data && backendResponse.data.ics_url) {
         setIcsUrl(backendResponse.data.ics_url);
         setStatus("iCalendar file generated successfully!");
