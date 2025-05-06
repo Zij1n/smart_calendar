@@ -10,7 +10,8 @@ import {
 import axios from "axios";
 
 // Backend URL
-const backendUrl = "http://192.168.1.152:8000"; // Or your deployed backend URL
+const backendUrl =
+  process.env.EXPO_PUBLIC_BACKEND_URL || "http://localhost:8000"; // Use environment variable or fallback to local
 
 export default function App() {
   const [userInput, setUserInput] = React.useState("");

@@ -1,0 +1,6 @@
+fastapi
+google-generativeai
+icalendar
+pydantic
+python-multipart
+uvicorn
