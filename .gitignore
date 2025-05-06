@@ -1,0 +1,36 @@
+# Ignore Python virtual environments
+.venv/
+venv/
+env/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore build artifacts
+dist/
+build/
+*.egg-info/
+
+# Ignore Node.js dependencies
+node_modules/
+
+# Ignore frontend build output
+.expo/
+web-build/
+
+# Ignore Vercel build output
+.vercel/
+
+# Ignore static files served by Vercel
+public/
+
+# Ignore editor-specific files
+.vscode/
+
+# Ignore temporary files
+*.tmp
+*~
+
+# Ignore environment variables file
+.env
