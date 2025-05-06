@@ -11,7 +11,8 @@ import axios from "axios";
 
 // Backend URL
 const backendUrl =
-  process.env.EXPO_PUBLIC_BACKEND_URL || "http://localhost:8000"; // Use environment variable or fallback to local
+  process.env.EXPO_PUBLIC_BACKEND_URL ||
+  "https://smart-calendar-backend.vercel.app"; // Use environment variable or fallback to local
 
 export default function App() {
   const [userInput, setUserInput] = React.useState("");
