@@ -83,7 +83,7 @@ You are acting as a **flexible daily planner** for someone with an **irregular s
      - Task names or short labels
      - Breaks labeled clearly
   2. **Raw `.ics` file content** with correct formatting:
-     - Use `BEGIN:VEVENT`, `DTSTART;TZID=America/New_York:YYYYMMDDTHHMMSS`, `DTEND;TZID=America/New_York:YYYYMMDDTHHMMSS`, and `SUMMARY:Task name`
+     - Use `BEGIN:VEVENT`, `DTSTART;TZID=America/New_York:YYYYMMDDTHHMMSS`, `DTEND;TZID=America/New_York:YYYYMMSS`, and `SUMMARY:Task name`
      - Wrap all events in `BEGIN:VCALENDAR` and `END:VCALENDAR`
      - Use 24-hour time and assume all times are in America/New_York
 
@@ -161,11 +161,11 @@ YOU MUST BE AWARE OF THE CURRENT TIME!!!! you should only schduel event that hap
         filename = f"{uuid.uuid4()}.ics"
 
         # Define path to the project's root public directory
-        # __file__ is calendar-app-backend/main.py
-        # os.path.dirname(__file__) is calendar-app-backend
-        # os.path.join(os.path.dirname(__file__), "..") is the project root
+        # __file__ is calendar-app-backend/api/index.py
+        # os.path.dirname(__file__) is calendar-app-backend/api
+        # os.path.join(os.path.dirname(__file__), "..", "..") is the project root
         project_root_public_dir = os.path.join(
-            os.path.dirname(__file__), "..", "public"
+            os.path.dirname(__file__), "..", "..", "public"
         )
 
         # Save to the root 'public' directory for Vercel static serving

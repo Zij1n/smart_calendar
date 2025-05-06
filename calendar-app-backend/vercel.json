@@ -1,14 +1,14 @@
 {
   "builds": [
     {
-      "src": "calendar-app-backend/main.py",
+      "src": "api/index.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "calendar-app-backend/main.py"
+      "dest": "api/index.py"
     }
   ]
 }
